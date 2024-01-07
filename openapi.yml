@@ -1,0 +1,1230 @@
+openapi: 3.0.0
+info:
+  title: resturantMenu
+  version: 1.0.0
+servers:
+  - url: http://{{apiurl}}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    noauthAuth:
+      type: http
+      scheme: noauth
+tags:
+  - name: Dashboard
+  - name: Dashboard > Auth
+  - name: Dashboard > Media
+  - name: Dashboard > user
+  - name: Dashboard > Client
+  - name: Dashboard > Client > Medication Package
+  - name: Dashboard > Roles
+  - name: Dashboard > Permissions
+  - name: Dashboard > Category
+  - name: Dashboard > menu
+  - name: Dashboard > Items
+  - name: Dashboard > Notification
+  - name: Client
+  - name: Client > Auth
+  - name: Client > Media
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Dashboard > Auth
+      summary: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: admin@test.com
+                password: password
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/logout:
+    post:
+      tags:
+        - Client > Auth
+      summary: logout
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/change-password:
+    post:
+      tags:
+        - Dashboard > Auth
+      summary: change password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                oldPassword: password
+                password: password
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/forget-password:
+    post:
+      tags:
+        - Dashboard > Auth
+      summary: forget password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: sys-admin@test.com
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/reset-password:
+    post:
+      tags:
+        - Dashboard > Auth
+      summary: reset password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: steve.alshareef@gmail.com
+                code: "123456"
+                password: password
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/me:
+    get:
+      tags:
+        - Dashboard > Auth
+      summary: get me
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > Auth
+      summary: update me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: steve alshareef
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/me/change-language:
+    post:
+      tags:
+        - Dashboard > Auth
+      summary: change language
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                language: ar
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/me/change-fcm-token:
+    post:
+      tags:
+        - Client > Auth
+      summary: change fcm token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                token: new token
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /media:
+    post:
+      tags:
+        - Client > Media
+      summary: upload medium
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                medium:
+                  type: string
+                  format: binary
+                type:
+                  type: integer
+                  example: "1"
+                for:
+                  type: string
+                  example: user-profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /media/{id}:
+    get:
+      tags:
+        - Client > Media
+      summary: View
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "915"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /media/multiple:
+    post:
+      tags:
+        - Client > Media
+      summary: upload media
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                media[0][medium]:
+                  type: string
+                  format: binary
+                media[0][type]:
+                  type: integer
+                  example: "1"
+                media[0][for]:
+                  type: string
+                  example: user-profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /employees:
+    get:
+      tags:
+        - Dashboard > user
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Dashboard > user
+      summary: create
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"firstName\":\"firstName\",\r\n   
+                \"lastName\":\"lastName\",\r\n   
+                \"mobile\":\"0933344999\",\r\n   
+                \"email\":\"tesr666t@test.com\",\r\n   
+                \"address\":\"mobile\",\r\n    \"phone\":\"5353777\",\r\n   
+                \"status\":1,\r\n    \"password\":\"12345678\",\r\n   
+                \"note\":{\r\n        \"en\":\"note note en\",\r\n       
+                \"ar\":\"note note ar \"\r\n    },\r\n    \"roles\":
+                [\r\n        \"test1\"\r\n    ],\r\n    \"imageId\":1\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /employees/{id}:
+    get:
+      tags:
+        - Dashboard > user
+      summary: show
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "2"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > user
+      summary: update
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"firstName\":\"firstName\",\r\n   
+                \"lastName\":\"lastName\",\r\n   
+                \"mobile\":\"0933344464\",\r\n   
+                \"email\":\"tesr6t@test.com\",\r\n   
+                \"address\":\"mobile\",\r\n    \"phone\":\"5353076\",\r\n   
+                \"status\":1,\r\n    \"birthDate\":\"2022-12-27\",\r\n   
+                \"note\":{\r\n        \"en\":\"note note en\",\r\n       
+                \"ar\":\"note note ar \"\r\n    },\r\n   
+                \"nationalIdentityNumber\":\"12345678900 \",\r\n    \"roles\":
+                [\r\n        \"employee\",\"client\"\r\n    ],\r\n   
+                \"cityId\":1,\r\n    \"imageId\":1\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "126"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Dashboard > user
+      summary: delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /medication-package:
+    get:
+      tags:
+        - Dashboard > Client > Medication Package
+      summary: index
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /clients:
+    get:
+      tags:
+        - Dashboard > Client
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /client-discount-codes/{clientId}:
+    get:
+      tags:
+        - Dashboard > Client
+      summary: Client Discount Codes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: clientId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /clients/{id}:
+    get:
+      tags:
+        - Dashboard > Client
+      summary: show
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "2"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > Client
+      summary: update
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"bloodType\":\"A-\",\r\n    \"weight\":90,\r\n   
+                \"height\":165,\r\n    \"healthStatus\":\"healthStatus
+                Dscrabtion en\",\r\n    \"diseaseId\":[\r\n        1,2\r\n   
+                ]\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "7"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Dashboard > Client
+      summary: delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /roles:
+    get:
+      tags:
+        - Dashboard > Roles
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Dashboard > Roles
+      summary: create
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"name\":\"test1\",\r\n   
+                \"permissions\":[\r\n        \"can-create-user\"\r\n    ]\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /roles/{id}:
+    get:
+      tags:
+        - Dashboard > Roles
+      summary: show
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "2"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > Roles
+      summary: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                permissions:
+                  - can_view_permissions
+                  - can_view_all_roles
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "11"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /permissions:
+    get:
+      tags:
+        - Dashboard > Permissions
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /category:
+    get:
+      tags:
+        - Dashboard > Category
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Dashboard > Category
+      summary: store
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n \r\n    \"name\": \"Ut eius sequi odio aut.\",\r\n   
+                \"parentId\": 1,\r\n    \"imageId\": 1,\r\n    \"order\":
+                8\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /category/{id}:
+    get:
+      tags:
+        - Dashboard > Category
+      summary: show
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > Category
+      summary: update
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"note\": {\r\n        \"ar\": \"Ut eius sequi odio
+                aut.\",\r\n        \"en\": \"sss\"\r\n    },\r\n    \"name\":
+                {\r\n        \"ar\": \"Ut eius sequi odio aut.\",\r\n       
+                \"en\": \"sss\"\r\n    },\r\n    \"parent\": null,\r\n   
+                \"order\": 8\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "2"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Dashboard > Category
+      summary: delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /menus:
+    get:
+      tags:
+        - Dashboard > menu
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Dashboard > menu
+      summary: store
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"name\": \"Ut eius sequi odio aut.\",\r\n   
+                \"mainCategoryId\": 1\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /menus/{id}:
+    get:
+      tags:
+        - Dashboard > menu
+      summary: show
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > menu
+      summary: update
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"note\": {\r\n        \"ar\": \"Ut eius sequi odio
+                aut.\",\r\n        \"en\": \"sss\"\r\n    },\r\n    \"name\":
+                {\r\n        \"ar\": \"Ut eius sequi odio aut.\",\r\n       
+                \"en\": \"sss\"\r\n    },\r\n    \"parent\": null,\r\n   
+                \"order\": 8\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "2"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /items:
+    get:
+      tags:
+        - Dashboard > Items
+      summary: index
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Dashboard > Items
+      summary: store
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \r\n    \"name\":  \"Ut eius sequi odio
+                aut.\",\r\n        \r\n    \"categoryId\": 3,\r\n   
+                \"imageId\": 1,\r\n    \"order\": 8\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /items/{id}:
+    get:
+      tags:
+        - Dashboard > Items
+      summary: show
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Dashboard > Items
+      summary: update
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                "{\r\n    \"note\": {\r\n        \"ar\": \"Ut eius sequi odio
+                aut.\",\r\n        \"en\": \"sss\"\r\n    },\r\n    \"name\":
+                {\r\n        \"ar\": \"Ut eius sequi odio aut.\",\r\n       
+                \"en\": \"sss\"\r\n    },\r\n    \"parent\": null,\r\n   
+                \"order\": 8\r\n}"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "2"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Dashboard > Items
+      summary: delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /category/export:
+    post:
+      tags:
+        - Dashboard > Items
+      summary: export
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: true
+                id: true
+                parent: true
+                order: true
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /notifications/my-notifications:
+    get:
+      tags:
+        - Dashboard > Notification
+      summary: index
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /store/active:
+    get:
+      tags:
+        - Dashboard > Notification
+      summary: Unread Notifications
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /notifications/{id}/read:
+    put:
+      tags:
+        - Dashboard > Notification
+      summary: read
+      requestBody:
+        content: {}
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /general-statistic:
+    get:
+      tags:
+        - Dashboard
+      summary: general_statistic
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/send-otp:
+    post:
+      tags:
+        - Client > Auth
+      summary: send Otp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                mobile: "0997319558"
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Accept-Language
+          in: header
+          schema:
+            type: string
+          example: ar
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/client-login:
+    post:
+      tags:
+        - Client > Auth
+      summary: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                mobile: "0997319558"
+                code: "12345"
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/me/delete:
+    delete:
+      tags:
+        - Client > Auth
+      summary: delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/client/me:
+    get:
+      tags:
+        - Client > Auth
+      summary: get me
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Client > Auth
+      summary: update me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstName: firstName
+                lastName: lastName
+                birthDate: "2022-12-27"
+                mobile: "0997319558"
+                gender: 2
+                cityId: 1
+                imageId: 2
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/client/verify-mobile:
+    put:
+      tags:
+        - Client > Auth
+      summary: Verify Mobile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                code: "12345"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
