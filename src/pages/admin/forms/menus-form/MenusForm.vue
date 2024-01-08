@@ -3,18 +3,18 @@
 <template>
   <div class="form-elements grid grid-cols-12 gap-6">
     <va-card class="col-span-12">
-      <va-card-title>{{ "Items details" }}</va-card-title>
+      <va-card-title>{{ "Menu details" }}</va-card-title>
       <va-card-content>
         <form>
           <div class="grid grid-cols-12 gap-6">
             <div class="flex md:col-span-4 sm:col-span-6 col-span-12">
-              <va-input v-model="name" placeholder="item name" />
+              <va-input v-model="name" placeholder="Menu name" />
             </div>
             <div class="flex md:col-span-4 sm:col-span-6 col-span-12">
-              <va-input type="number" v-model="discountValue" placeholder="discount value" />
+              <va-input v-model="discount" type="number" placeholder="discount value" />
             </div>
             <div class="flex md:col-span-6 col-span-12">
-              <va-select v-model="parentCategory" label="item category" text-by="description" track-by="id"
+              <va-select v-model="mainCategory" label="Main category" text-by="description" track-by="id"
                 :options="categoriesData" />
             </div>
 
@@ -33,10 +33,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-  DashboardCategoryService,
-  DashboardItemsService,
-} from "../../../../api/gen";
+import { DashboardCategoryService, DashboardMenuService } from "../../../../api/gen";
 import { useRouter } from "vue-router";
 const categoriesData = ref([]);
 
@@ -55,17 +52,24 @@ DashboardCategoryService.getCategory().then((res) => {
 const router = useRouter();
 
 function onclick() {
-  DashboardItemsService.postItems({
+  DashboardMenuService.postMenus({
     name: name.value,
-    categoryId: parentCategory.value.id,
-    discountValue: discountValue.value
+    mainCategoryId: mainCategory.value.id,
+    discountValue: discount.value,
   }).then(() => {
-    router.push({ name: "items-show" });
+    router.push({ name: "menus-show" });
   });
 }
-const parentCategory = ref();
+const mainCategory = ref();
 const name = ref("");
-const discountValue = ref("");
+const discount = ref(0);
+
+const datePlusDay = (date: Date, days: number) => {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+};
+
 
 </script>
 

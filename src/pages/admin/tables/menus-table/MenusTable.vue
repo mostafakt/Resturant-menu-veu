@@ -9,14 +9,17 @@
             <th>{{ t("tables.headings.name") }}</th>
             <th>{{ t("category name") }}</th>
             <th>{{ t("discount value") }}</th>
+            <th>{{ t("creator") }}</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr v-for="categoryData in categoriesData" :key="categoryData?.id">
-            <td>{{ categoryData?.name }}</td>
-            <td>{{ categoryData?.category?.name }}</td>
-            <td>{{ categoryData?.discountValue }}%</td>
+
+          <tr class=" cursor-pointer" @click="onclick(menuData?.id)" v-for="menuData in menusData" :key="menuData?.id">
+            <td>{{ menuData?.name }}</td>
+            <td>{{ menuData?.mainCategory?.name }}</td>
+            <td>{{ menuData?.discountValue }}%</td>
+            <td>{{ menuData?.createdBy.firstName + " " + menuData?.createdBy.lastName }}</td>
           </tr>
         </tbody>
       </table>
@@ -27,22 +30,26 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import data from "../../../../data/tables/markup-table/data.json";
 import {
-  DashboardCategoryService,
-  DashboardItemsService,
+
+  DashboardMenuService,
 } from "../../../../api/gen";
 import { log } from "console";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
+const router = useRouter()
+const onclick = (id: number) => {
 
-let categoriesData = ref();
+  router.push({ name: `menu-details`, params: { id: id } });
+}
+let menusData = ref();
 
-DashboardItemsService.getItems().then((res) => {
-  categoriesData.value = res.data;
+DashboardMenuService.getMenus().then((res) => {
+  menusData.value = res.data;
 });
 
-watch(categoriesData, () => {
+watch(menusData, () => {
   console.log("ok...");
 });
 </script>

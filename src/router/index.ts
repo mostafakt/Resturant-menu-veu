@@ -7,6 +7,7 @@ import Page404Layout from "../layouts/Page404Layout.vue";
 
 import RouteViewComponent from "../layouts/RouterBypass.vue";
 import UIRoute from "../pages/admin/ui/route";
+import { ACCESS_TOKEN } from "../utils/constants";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,40 +19,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin",
     component: AppLayout,
     children: [
-      // {
-      //   name: "dashboard",
-      //   path: "dashboard",
-      //   component: () => import("../pages/admin/dashboard/Dashboard.vue"),
-      // },
-      // {
-      //   name: "statistics",
-      //   path: "statistics",
-      //   component: RouteViewComponent,
-      //   children: [
-      //     {
-      //       name: "charts",
-      //       path: "charts",
-      //       component: () =>
-      //         import("../pages/admin/statistics/charts/Charts.vue"),
-      //       meta: {
-      //         wikiLink:
-      //           "https://github.com/epicmaxco/vuestic-admin/wiki/Charts",
-      //       },
-      //     },
-      //     {
-      //       name: "progress-bars",
-      //       path: "progress-bars",
-      //       component: () =>
-      //         import(
-      //           "../pages/admin/statistics/progress-bars/ProgressBars.vue"
-      //         ),
-      //       meta: {
-      //         wikiLink:
-      //           "https://github.com/epicmaxco/vuestic-admin/wiki/Progress-Bars",
-      //       },
-      //     },
-      //   ],
-      // },
       {
         name: "categories",
         path: "categories",
@@ -108,76 +75,44 @@ const routes: Array<RouteRecordRaw> = [
           },
         ],
       },
-      // {
-      //   name: "maps",
-      //   path: "maps",
-      //   component: RouteViewComponent,
-      //   children: [
-      //     {
-      //       name: "maplibre-maps",
-      //       path: "maplibre-maps",
-      //       component: () =>
-      //         import("../pages/admin/maps/maplibre-maps/MapLibreMapsPage.vue"),
-      //       meta: {
-      //         wikiLink: "https://github.com/epicmaxco/vuestic-admin/wiki/Maps",
-      //       },
-      //     },
-      //     {
-      //       name: "yandex-maps",
-      //       path: "yandex-maps",
-      //       component: () =>
-      //         import("../pages/admin/maps/yandex-maps/YandexMapsPage.vue"),
-      //       meta: {
-      //         wikiLink: "https://github.com/epicmaxco/vuestic-admin/wiki/Maps",
-      //       },
-      //     },
-      //     {
-      //       name: "leaflet-maps",
-      //       path: "leaflet-maps",
-      //       component: () =>
-      //         import("../pages/admin/maps/leaflet-maps/LeafletMapsPage.vue"),
-      //       meta: {
-      //         wikiLink: "https://github.com/epicmaxco/vuestic-admin/wiki/Maps",
-      //       },
-      //     },
-      //     {
-      //       name: "bubble-maps",
-      //       path: "bubble-maps",
-      //       component: () =>
-      //         import("../pages/admin/maps/bubble-maps/BubbleMapsPage.vue"),
-      //       meta: {
-      //         wikiLink: "https://github.com/epicmaxco/vuestic-admin/wiki/Maps",
-      //       },
-      //     },
-      //     {
-      //       name: "line-maps",
-      //       path: "line-maps",
-      //       component: () =>
-      //         import("../pages/admin/maps/line-maps/LineMapsPage.vue"),
-      //       meta: {
-      //         wikiLink: "https://github.com/epicmaxco/vuestic-admin/wiki/Maps",
-      //       },
-      //     },
-      //   ],
-      // },
+      {
+        name: "menus",
+        path: "menus",
+        component: RouteViewComponent,
+        children: [
+          {
+            name: "menus-form",
+            path: "menus-form",
+            component: () =>
+              import("../pages/admin/forms/menus-form/MenusForm.vue"),
+            meta: {
+              wikiLink:
+                "https://github.com/epicmaxco/vuestic-admin/wiki/inputs",
+            },
+          },
+          {
+            name: "menus-show",
+            path: "menus-show",
+            component: () =>
+              import("../pages/admin/tables/menus-table/MenusTable.vue"),
+            meta: {
+              wikiLink:
+                "https://github.com/epicmaxco/vuestic-admin/wiki/Medium-Editor",
+            },
+          },
+          {
+            name: "menu-details",
+            path: "/menu-details/:id",
+            component: () =>
+              import("../pages/admin/details/menus-details/MenuDetails.vue"),
+            meta: {
+              wikiLink:
+                "https://github.com/epicmaxco/vuestic-admin/wiki/Medium-Editor",
+            },
+          },
+        ],
+      },
 
-      // {
-      //   name: "pages",
-      //   path: "pages",
-      //   component: RouteViewComponent,
-      //   children: [
-      //     {
-      //       name: "404-pages",
-      //       path: "404-pages",
-      //       component: () => import("../pages/admin/pages/404PagesPage.vue"),
-      //     },
-      //     {
-      //       name: "faq",
-      //       path: "faq",
-      //       component: () => import("../pages/admin/pages/FaqPage.vue"),
-      //     },
-      //   ],
-      // },
       UIRoute,
     ],
   },
@@ -251,5 +186,12 @@ const router = createRouter({
   },
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  if (!accessToken && to.path !== "/auth/login") {
+    next("/auth/login");
+  } else {
+    next();
+  }
+});
 export default router;

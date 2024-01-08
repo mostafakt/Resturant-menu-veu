@@ -5,7 +5,50 @@
 import type { CancelablePromise } from "../core/CancelablePromise";
 import { OpenAPI } from "../core/OpenAPI";
 import { request as __request } from "../core/request";
-
+export type categoryDetailsResponse = {
+  id: number;
+  name: string;
+  childes: any[];
+  image: {
+    id: number;
+    url: string;
+    extension: string;
+  };
+  mainImage: {
+    id: number;
+    url: string;
+    extension: string;
+  };
+  parentCategory: {
+    id: number;
+    name: string;
+    image: {
+      id: number;
+      url: string;
+      extension: string;
+    };
+    mainImage: {
+      id: number;
+      url: string;
+      extension: string;
+    };
+  };
+  discountValue: string;
+  createdAt: string;
+  createdBy: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+  updatedAt: string;
+  updatedBy: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+  deletedAt: null;
+  deletedBy: null;
+};
 export class DashboardCategoryService {
   /**
    * index
@@ -16,7 +59,7 @@ export class DashboardCategoryService {
   public static getCategory(contentType?: string): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/category",
+      url: "/category?page=1&perPage=999",
       headers: {
         "Content-Type": contentType,
       },
@@ -55,10 +98,10 @@ export class DashboardCategoryService {
   public static getCategory1(
     id: number,
     contentType?: string
-  ): CancelablePromise<any> {
+  ): CancelablePromise<categoryDetailsResponse> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/category/{id}",
+      url: `/category/${id}`,
       path: {
         id: id,
       },

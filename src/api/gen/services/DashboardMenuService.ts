@@ -31,8 +31,8 @@ export class DashboardMenuService {
    * @throws ApiError
    */
   public static postMenus(
-    contentType?: string,
-    requestBody?: string
+    requestBody?: { name: string; mainCategoryId: any; discountValue: number },
+    contentType?: string
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: "POST",
@@ -52,13 +52,47 @@ export class DashboardMenuService {
    * @returns any Successful response
    * @throws ApiError
    */
+
   public static getMenus1(
     id: number,
     contentType?: string
-  ): CancelablePromise<any> {
+  ): CancelablePromise<{
+    id: number;
+    name: string;
+    mainCategory: {
+      id: number;
+      name: string;
+      image: {
+        id: number;
+        url: string;
+        extension: string;
+      };
+      mainImage: {
+        id: number;
+        url: string;
+        extension: string;
+      };
+      childes: any[];
+    };
+    discountValue: string;
+    createdAt: string;
+    createdBy: {
+      id: number;
+      firstName: string;
+      lastName: string;
+    };
+    updatedAt: string;
+    updatedBy: {
+      id: number;
+      firstName: string;
+      lastName: string;
+    };
+    deletedAt: null;
+    deletedBy: null;
+  }> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/menus/{id}",
+      url: `/menus/${id}`,
       path: {
         id: id,
       },

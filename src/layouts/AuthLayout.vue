@@ -2,7 +2,7 @@
   <div class="auth-layout grid grid-cols-12 content-center">
     <div class="flex col-span-12 p-4 justify-center">
       <router-link class="py-5 justify-center flex" to="/">
-        <vuestic-logo height="32" />
+
       </router-link>
     </div>
 
@@ -33,7 +33,7 @@ import { useI18n } from "vue-i18n";
 
 export default {
   name: "AuthLayout",
-  components: { VuesticLogo },
+  components: {},
   setup() {
     const { t } = useI18n();
     return { t };
@@ -59,11 +59,9 @@ export default {
 <style lang="scss">
 .auth-layout {
   min-height: 100vh;
-  background-image: linear-gradient(
-    to right,
-    var(--va-background-primary),
-    var(--va-white)
-  );
+  background-image: linear-gradient(to right,
+      var(--va-background-primary),
+      var(--va-white));
 
   &__card {
     width: 100%;

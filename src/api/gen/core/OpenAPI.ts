@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import { ACCESS_TOKEN } from "../../../utils/constants";
 import type { ApiRequestOptions } from "./ApiRequestOptions";
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
@@ -20,11 +21,11 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: "http://{{apiurl}}",
+  BASE: "http://127.0.0.1:8000/api",
   VERSION: "1.0.0",
   WITH_CREDENTIALS: false,
   CREDENTIALS: "include",
-  TOKEN: undefined,
+  TOKEN: `${localStorage.getItem(ACCESS_TOKEN)}`,
   USERNAME: undefined,
   PASSWORD: undefined,
   HEADERS: undefined,

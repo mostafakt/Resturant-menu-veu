@@ -13,9 +13,13 @@ export class DashboardAuthService {
    * @returns any Successful response
    * @throws ApiError
    */
-  public static postAuthLogin(
-    requestBody?: Record<string, any>
-  ): CancelablePromise<any> {
+  public static postAuthLogin(requestBody?: {
+    email: string;
+    password: string;
+  }): CancelablePromise<{
+    token: string;
+    user: any;
+  }> {
     return __request(OpenAPI, {
       method: "POST",
       url: "/auth/login",

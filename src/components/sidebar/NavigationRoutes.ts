@@ -21,7 +21,7 @@ export default {
       children: [
         {
           name: "categories-form",
-          displayName: "add categories",
+          displayName: "Add categories",
         },
         {
           name: "categories-show",
@@ -39,11 +39,29 @@ export default {
       children: [
         {
           name: "items-form",
-          displayName: "add items",
+          displayName: "Add items",
         },
         {
           name: "items-show",
           displayName: "Items",
+        },
+      ],
+    },
+    {
+      name: "menus",
+      displayName: "menus",
+      meta: {
+        icon: "vuestic-iconset-forms",
+      },
+      disabled: true,
+      children: [
+        {
+          name: "menus-form",
+          displayName: "Add menus",
+        },
+        {
+          name: "menus-show",
+          displayName: "Menus",
         },
       ],
     },

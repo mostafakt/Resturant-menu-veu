@@ -31,7 +31,7 @@ export class DashboardItemsService {
    * @throws ApiError
    */
   public static postItems(
-    requestBody?: { name: string; categoryId: number },
+    requestBody?: { name: string; categoryId: number; discountValue: string },
     contentType?: string
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
